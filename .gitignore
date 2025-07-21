@@ -1,0 +1,8 @@
+.copilot-instructions.md
+
+# Virtual environments
+venv/
+env/
+ENV/
+.venv/
+.env/
