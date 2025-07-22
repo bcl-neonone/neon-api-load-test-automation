@@ -110,42 +110,72 @@ def generate_event_payload():
         "thumbnailUrl": fake.image_url()
     }
 
+def generate_ticket_payload():
+    return {
+        "id": random.randint(1, 10000),
+        "name": fake.word().capitalize() + " Ticket",
+        "description": fake.sentence(),
+        "fee": round(random.uniform(0, 200), 2),
+        "maxNumberAvailable": random.randint(1, 500),
+        "numberRemaining": random.randint(0, 500),
+        "attendeesPerTicketType": "Up_to",
+        "attendeesPerTicketNumber": random.randint(1, 10),
+        "craInfo": {
+            "advantageAmount": random.randint(0, 100),
+            "advantageDescription": fake.sentence()
+        },
+        "taxDeductibleInfo": {
+            "nonDeductibleAmount": random.randint(0, 100),
+            "nonDeductibleDescription": fake.sentence()
+        }
+    }
+
 class NGE_API_Test(HttpUser):
     wait_time = between(0.5, 5)
 
-    @task
-    def get_event(self):
-        event_id = 1  # Replace with dynamic or random ID as needed
-        response = self.client.get(f"/api/events/{event_id}")
-        if response.status_code != 200:
-            print(f"GET /api/events/{event_id} status: {response.status_code}")
-            print(f"Response content: {response.content}")
 
     @task
-    def put_event(self):
-        event_id = 1
+    def create_then_delete_event(self):
+        # Create event
         payload = generate_event_payload()
-        response = self.client.put(f"/api/events/{event_id}", json=payload)
-        if response.status_code != 200:
-            print(f"PUT /api/events/{event_id} status: {response.status_code}")
-            print(f"Response content: {response.content}")
+        create_resp = self.client.post("/api/events", json=payload)
+        if create_resp.status_code != 201:
+            print(f"POST /api/events status: {create_resp.status_code}")
+            print(f"Response content: {create_resp.content}")
+            return
+        event_id = None
+        try:
+            event_id = create_resp.json().get("id")
+        except Exception as e:
+            print(f"Failed to parse event id from response: {e}")
+            print(f"Response content: {create_resp.content}")
+            return
+        if not event_id:
+            print("No event id returned from create event response.")
+            print(f"Response content: {create_resp.content}")
+            return
 
-    @task
-    def delete_event(self):
-        event_id = 1
-        response = self.client.delete(f"/api/events/{event_id}")
-        if response.status_code != 200:
-            print(f"DELETE /api/events/{event_id} status: {response.status_code}")
-            print(f"Response content: {response.content}")
+        get_resp = self.client.get(f"/api/events/{event_id}")
+        if get_resp.status_code != 200:
+            print(f"GET /api/events/{event_id} status: {get_resp.status_code}")
+            print(f"Response content: {get_resp.content}")
 
-    @task
-    def patch_event(self):
-        event_id = 1
-        payload = {"description": "Patched Event"}
-        response = self.client.patch(f"/api/events/{event_id}", json=payload)
-        if response.status_code != 200:
-            print(f"PATCH /api/events/{event_id} status: {response.status_code}")
-            print(f"Response content: {response.content}")
+        put_payload = generate_event_payload()
+        put_resp = self.client.put(f"/api/events/{event_id}", json=put_payload)
+        if put_resp.status_code != 200:
+            print(f"PUT /api/events/{event_id} status: {put_resp.status_code}")
+            print(f"Response content: {put_resp.content}")
+
+        patch_payload = generate_event_payload()
+        patch_resp = self.client.patch(f"/api/events/{event_id}", json=patch_payload)
+        if patch_resp.status_code != 200:
+            print(f"PATCH /api/events/{event_id} status: {patch_resp.status_code}")
+            print(f"Response content: {patch_resp.content}")
+
+        del_resp = self.client.delete(f"/api/events/{event_id}")
+        if del_resp.status_code != 200:
+            print(f"DELETE /api/events/{event_id} status: {del_resp.status_code}")
+            print(f"Response content: {del_resp.content}")
 
     @task
     def get_ticket_option(self):
@@ -160,7 +190,7 @@ class NGE_API_Test(HttpUser):
     def put_ticket_option(self):
         event_id = 1
         ticket_id = 1
-        payload = {"option": "Updated Option"}
+        payload = generate_ticket_payload()
         response = self.client.put(f"/api/events/{event_id}/tickets/{ticket_id}", json=payload)
         if response.status_code != 200:
             print(f"PUT /api/events/{event_id}/tickets/{ticket_id} status: {response.status_code}")
@@ -218,13 +248,7 @@ class NGE_API_Test(HttpUser):
             print(f"GET /api/events status: {response.status_code}")
             print(f"Response content: {response.content}")
 
-    @task
-    def post_event(self):
-        payload = {"name": "New Event"}
-        response = self.client.post("/api/events", json=payload)
-        if response.status_code != 200:
-            print(f"POST /api/events status: {response.status_code}")
-            print(f"Response content: {response.content}")
+
 
     @task
     def get_event_tickets(self):
