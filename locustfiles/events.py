@@ -116,117 +116,183 @@ class NGE_API_Test(HttpUser):
     @task
     def get_event(self):
         event_id = 1  # Replace with dynamic or random ID as needed
-        self.client.get(f"/api/events/{event_id}")
+        response = self.client.get(f"/api/events/{event_id}")
+        if response.status_code != 200:
+            print(f"GET /api/events/{event_id} status: {response.status_code}")
+            print(f"Response content: {response.content}")
 
     @task
     def put_event(self):
         event_id = 1
         payload = generate_event_payload()
-        self.client.put(f"/api/events/{event_id}", json=payload)
+        response = self.client.put(f"/api/events/{event_id}", json=payload)
+        if response.status_code != 200:
+            print(f"PUT /api/events/{event_id} status: {response.status_code}")
+            print(f"Response content: {response.content}")
 
     @task
     def delete_event(self):
         event_id = 1
-        self.client.delete(f"/api/events/{event_id}")
+        response = self.client.delete(f"/api/events/{event_id}")
+        if response.status_code != 200:
+            print(f"DELETE /api/events/{event_id} status: {response.status_code}")
+            print(f"Response content: {response.content}")
 
     @task
     def patch_event(self):
         event_id = 1
         payload = {"description": "Patched Event"}
-        self.client.patch(f"/api/events/{event_id}", json=payload)
+        response = self.client.patch(f"/api/events/{event_id}", json=payload)
+        if response.status_code != 200:
+            print(f"PATCH /api/events/{event_id} status: {response.status_code}")
+            print(f"Response content: {response.content}")
 
     @task
     def get_ticket_option(self):
         event_id = 1
         ticket_id = 1
-        self.client.get(f"/api/events/{event_id}/tickets/{ticket_id}")
+        response = self.client.get(f"/api/events/{event_id}/tickets/{ticket_id}")
+        if response.status_code != 200:
+            print(f"GET /api/events/{event_id}/tickets/{ticket_id} status: {response.status_code}")
+            print(f"Response content: {response.content}")
 
     @task
     def put_ticket_option(self):
         event_id = 1
         ticket_id = 1
         payload = {"option": "Updated Option"}
-        self.client.put(f"/api/events/{event_id}/tickets/{ticket_id}", json=payload)
+        response = self.client.put(f"/api/events/{event_id}/tickets/{ticket_id}", json=payload)
+        if response.status_code != 200:
+            print(f"PUT /api/events/{event_id}/tickets/{ticket_id} status: {response.status_code}")
+            print(f"Response content: {response.content}")
 
     @task
     def delete_ticket_option(self):
         event_id = 1
         ticket_id = 1
-        self.client.delete(f"/api/events/{event_id}/tickets/{ticket_id}")
+        response = self.client.delete(f"/api/events/{event_id}/tickets/{ticket_id}")
+        if response.status_code != 200:
+            print(f"DELETE /api/events/{event_id}/tickets/{ticket_id} status: {response.status_code}")
+            print(f"Response content: {response.content}")
 
     @task
     def patch_ticket_option(self):
         event_id = 1
         ticket_id = 1
         payload = {"option": "Patched Option"}
-        self.client.patch(f"/api/events/{event_id}/tickets/{ticket_id}", json=payload)
+        response = self.client.patch(f"/api/events/{event_id}/tickets/{ticket_id}", json=payload)
+        if response.status_code != 200:
+            print(f"PATCH /api/events/{event_id}/tickets/{ticket_id} status: {response.status_code}")
+            print(f"Response content: {response.content}")
 
     @task
     def put_event_category(self):
         category_id = 1
         payload = {"name": "Updated Category"}
-        self.client.put(f"/api/events/categories/{category_id}", json=payload)
+        response = self.client.put(f"/api/events/categories/{category_id}", json=payload)
+        if response.status_code != 200:
+            print(f"PUT /api/events/categories/{category_id} status: {response.status_code}")
+            print(f"Response content: {response.content}")
 
     @task
     def delete_event_category(self):
         category_id = 1
-        self.client.delete(f"/api/events/categories/{category_id}")
+        response = self.client.delete(f"/api/events/categories/{category_id}")
+        if response.status_code != 200:
+            print(f"DELETE /api/events/categories/{category_id} status: {response.status_code}")
+            print(f"Response content: {response.content}")
 
     @task
     def patch_event_category(self):
         category_id = 1
         payload = {"description": "Patched Category"}
-        self.client.patch(f"/api/events/categories/{category_id}", json=payload)
+        response = self.client.patch(f"/api/events/categories/{category_id}", json=payload)
+        if response.status_code != 200:
+            print(f"PATCH /api/events/categories/{category_id} status: {response.status_code}")
+            print(f"Response content: {response.content}")
 
     @task
     def get_events(self):
-        self.client.get("/api/events")
+        response = self.client.get("/api/events")
+        if response.status_code != 200:
+            print(f"GET /api/events status: {response.status_code}")
+            print(f"Response content: {response.content}")
 
     @task
     def post_event(self):
         payload = {"name": "New Event"}
-        self.client.post("/api/events", json=payload)
+        response = self.client.post("/api/events", json=payload)
+        if response.status_code != 200:
+            print(f"POST /api/events status: {response.status_code}")
+            print(f"Response content: {response.content}")
 
     @task
     def get_event_tickets(self):
         event_id = 1
-        self.client.get(f"/api/events/{event_id}/tickets")
+        response = self.client.get(f"/api/events/{event_id}/tickets")
+        if response.status_code != 200:
+            print(f"GET /api/events/{event_id}/tickets status: {response.status_code}")
+            print(f"Response content: {response.content}")
 
     @task
     def post_event_ticket(self):
         event_id = 1
         payload = {"option": "New Ticket Option"}
-        self.client.post(f"/api/events/{event_id}/tickets", json=payload)
+        response = self.client.post(f"/api/events/{event_id}/tickets", json=payload)
+        if response.status_code != 200:
+            print(f"POST /api/events/{event_id}/tickets status: {response.status_code}")
+            print(f"Response content: {response.content}")
 
     @task
     def post_events_search(self):
         payload = {"query": "search term"}
-        self.client.post("/api/events/search", json=payload)
+        response = self.client.post("/api/events/search", json=payload)
+        if response.status_code != 200:
+            print(f"POST /api/events/search status: {response.status_code}")
+            print(f"Response content: {response.content}")
 
     @task
     def get_event_categories(self):
-        self.client.get("/api/events/categories")
+        response = self.client.get("/api/events/categories")
+        if response.status_code != 200:
+            print(f"GET /api/events/categories status: {response.status_code}")
+            print(f"Response content: {response.content}")
 
     @task
     def post_event_category(self):
         payload = {"name": "New Category"}
-        self.client.post("/api/events/categories", json=payload)
+        response = self.client.post("/api/events/categories", json=payload)
+        if response.status_code != 200:
+            print(f"POST /api/events/categories status: {response.status_code}")
+            print(f"Response content: {response.content}")
 
     @task
     def get_event_registrations(self):
         event_id = 1
-        self.client.get(f"/api/events/{event_id}/eventRegistrations")
+        response = self.client.get(f"/api/events/{event_id}/eventRegistrations")
+        if response.status_code != 200:
+            print(f"GET /api/events/{event_id}/eventRegistrations status: {response.status_code}")
+            print(f"Response content: {response.content}")
 
     @task
     def get_event_attendees(self):
         event_id = 1
-        self.client.get(f"/api/events/{event_id}/attendees")
+        response = self.client.get(f"/api/events/{event_id}/attendees")
+        if response.status_code != 200:
+            print(f"GET /api/events/{event_id}/attendees status: {response.status_code}")
+            print(f"Response content: {response.content}")
 
     @task
     def get_search_fields(self):
-        self.client.get("/api/events/search/searchFields")
+        response = self.client.get("/api/events/search/searchFields")
+        if response.status_code != 200:
+            print(f"GET /api/events/search/searchFields status: {response.status_code}")
+            print(f"Response content: {response.content}")
 
     @task
     def get_output_fields(self):
-        self.client.get("/api/events/search/outputFields")
+        response = self.client.get("/api/events/search/outputFields")
+        if response.status_code != 200:
+            print(f"GET /api/events/search/outputFields status: {response.status_code}")
+            print(f"Response content: {response.content}")
 
